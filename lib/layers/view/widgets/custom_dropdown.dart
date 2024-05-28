@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../configuration/styles.dart';
+import '../../../core/theme/color.dart';
 
 typedef OnChanged = void Function(dynamic value);
 
@@ -21,7 +20,6 @@ class CustomDropDown<T> extends StatelessWidget {
     this.autoValidateMode,
     this.validator,
     this.selectedValue,
-    this.inputDecoration,
     Key? key,
   }) : super(key: key);
 
@@ -38,11 +36,10 @@ class CustomDropDown<T> extends StatelessWidget {
   final String? Function()? validator;
   final AutovalidateMode? autoValidateMode;
   final T? selectedValue;
-  final InputDecoration? inputDecoration;
 
   late final InputBorder inputBorder = OutlineInputBorder(
     borderSide: BorderSide(
-      color: color ?? Styles.backgroundColor,
+      color: color ?? AppColor.general,
     ),
     borderRadius: BorderRadius.all(
       Radius.circular(30),
@@ -52,7 +49,7 @@ class CustomDropDown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      iconSize: 30,
+      iconSize: 20,
       isExpanded: true,
       hint: Center(
         widthFactor: 1,
@@ -60,42 +57,42 @@ class CustomDropDown<T> extends StatelessWidget {
           hintText,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: Styles.fontSize5,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
           key: textKey,
         ),
       ),
       focusColor: Colors.transparent,
-      decoration: inputDecoration ??
-          InputDecoration(
-              border: inputBorder,
-              disabledBorder: inputBorder,
-              enabledBorder: inputBorder,
-              focusedBorder: inputBorder,
-              fillColor: color ??
-                  (Theme.of(context).textTheme == ThemeMode.dark
-                      ? Theme.of(context).dividerColor
-                      : Theme.of(context).dividerColor.withOpacity(0.2)),
-              filled: true,
-              errorStyle: TextStyle(
-                color: Colors.red,
-                fontSize: Styles.fontSize6,
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: horizontalDropdownPadding ?? 48.h,
-                vertical: verticalDropdownPadding ?? 0,
-              ),
-              errorBorder: inputBorder.copyWith(
-                  borderSide: BorderSide(
-                color: Colors.red,
-              )),
-              focusedErrorBorder: inputBorder.copyWith(
-                  borderSide: BorderSide(
-                color: Colors.red,
-              ))),
+      decoration: InputDecoration(
+          border: inputBorder,
+          disabledBorder: inputBorder,
+          enabledBorder: inputBorder,
+          focusedBorder: inputBorder,
+          isDense: true,
+          fillColor: color ??
+              (Theme.of(context).textTheme == ThemeMode.dark
+                  ? Theme.of(context).dividerColor
+                  : Theme.of(context).dividerColor.withOpacity(0.2)),
+          filled: true,
+          errorStyle: TextStyle(
+            color: Colors.red,
+            fontSize: 16,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: horizontalDropdownPadding ?? 30,
+            vertical: verticalDropdownPadding ?? 0,
+          ),
+          errorBorder: inputBorder.copyWith(
+              borderSide: BorderSide(
+            color: Colors.red,
+          )),
+          focusedErrorBorder: inputBorder.copyWith(
+              borderSide: BorderSide(
+            color: Colors.red,
+          ))),
       autovalidateMode: autoValidateMode,
       selectedItemBuilder: selectedItemBuilder,
       items: dropDownItems,

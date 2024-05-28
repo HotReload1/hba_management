@@ -2,9 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hba_management/core/configuration/assets.dart';
+import 'package:hba_management/core/routing/route_path.dart';
+import 'package:hba_management/core/shared_preferences/shared_preferences_instance.dart';
+import 'package:hba_management/core/shared_preferences/shared_preferences_key.dart';
 import 'package:hba_management/layers/view/auth/login_screen.dart';
 import 'package:hba_management/layers/view/home_page.dart';
+import 'package:hba_management/layers/view/hotel/hotels.dart';
+import 'package:provider/provider.dart';
 
+import '../../../core/app/state/app_state.dart';
 import '../../../core/utils/size_config.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,16 +26,21 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation _animation;
 
   getData() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 3), () async {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => MyHomePage()),
-            (route) => false); //home page
+        await Provider.of<AppState>(context, listen: false).init();
+        if (SharedPreferencesInstance.pref
+                .getInt(SharedPreferencesKeys.UserRole) ==
+            1) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              RoutePaths.HotelsScreen, (route) => false);
+        }
+
+        //home page
       } else {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => LoginScreen()),
-            (route) => false); //login
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            RoutePaths.LogIn, (route) => false); //login
       }
     });
   }

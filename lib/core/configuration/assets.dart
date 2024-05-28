@@ -20,7 +20,7 @@ class AssetsLink {
 
   //animations
   /// lottie
-  static const LOADING_ANIMATION = "assets/animations/lottie/loading.json";
+  static const LOADING_ANIMATION = "assets/lottie/loading.json";
 
   /// rive
   static const DayNightButton = "assets/animations/rive/day_night_button.riv";

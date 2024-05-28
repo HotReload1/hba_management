@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hba_management/core/constants.dart';
 import 'package:hba_management/layers/view/hotel/hotels.dart';
+import 'package:hba_management/layers/view/hotel_managers/hotel_managers.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -26,7 +27,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: [HotelsScreen(), Scaffold()],
+          children: [HotelsScreen(), HotelManagers()],
         ),
       ),
     );
