@@ -12,6 +12,8 @@ abstract class Styles {
   static Color get colorTertiary => const Color(0xFF5a4647);
 
   static Color get backgroundColor => const Color(0XFF1B1B27);
+  static const shadowColor = Colors.black87;
+  static const textColor = Color(0xFF333333);
 
   static const FontColorWhite = Color(0xFFFFFFFF);
   static const FontColorGray = Color(0xFFBCBCBC);

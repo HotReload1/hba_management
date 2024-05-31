@@ -9,6 +9,8 @@ import 'package:hba_management/layers/view/hotel/create_hotel.dart';
 import 'package:hba_management/layers/view/hotel/hotels.dart';
 import 'package:hba_management/layers/view/hotel_managers/create_hotel_manager.dart';
 import 'package:hba_management/layers/view/hotel_managers/hotel_managers.dart';
+import 'package:hba_management/layers/view/room/create_room.dart';
+import 'package:hba_management/layers/view/room/rooms.dart';
 
 import '../../layers/view/intro/splash_screen.dart';
 
@@ -25,6 +27,14 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => HotelsScreen());
       case RoutePaths.HotelManagersScreen:
         return MaterialPageRoute(builder: (_) => HotelManagers());
+      case RoutePaths.RoomsScreen:
+        return MaterialPageRoute(builder: (_) => RoomsScreen());
+      case RoutePaths.CreateRoomScreen:
+        final arguments = settings.arguments ?? <String, dynamic>{} as Map;
+        return MaterialPageRoute(
+            builder: (_) => CreateRoomScreen(
+                  room: (arguments as Map)["room"],
+                ));
       case RoutePaths.CreateHotelScreen:
         final arguments = settings.arguments ?? <String, dynamic>{} as Map;
         return MaterialPageRoute(

@@ -73,7 +73,8 @@ class HotelProvider {
   }
 
   Future<String> uploadImage(File image) async {
-    Reference reference = _storage.ref().child("images/${Uuid().v4()}.jpg");
+    Reference reference =
+        _storage.ref().child("hotels/images/${Uuid().v4()}.jpg");
     await reference.putFile(image);
     String url = await reference.getDownloadURL();
 

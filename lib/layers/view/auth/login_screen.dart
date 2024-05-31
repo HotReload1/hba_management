@@ -36,13 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
               LoadingOverlay.of(context).show();
             } else if (state is AuthLoaded) {
               await Provider.of<AppState>(context, listen: false).init();
-
               if (SharedPreferencesInstance.pref
                       .getInt(SharedPreferencesKeys.UserRole) ==
                   1) {
                 LoadingOverlay.of(context).hide();
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     RoutePaths.HotelsScreen, (route) => false);
+              } else {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    RoutePaths.RoomsScreen, (route) => false);
               }
             } else if (state is AuthError) {
               LoadingOverlay.of(context).hide();

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hba_management/core/configuration/assets.dart';
+import 'package:hba_management/core/exception/app_exceptions.dart';
 import 'package:hba_management/core/routing/route_path.dart';
 import 'package:hba_management/core/shared_preferences/shared_preferences_instance.dart';
 import 'package:hba_management/core/shared_preferences/shared_preferences_key.dart';
@@ -25,8 +26,8 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation _animation;
 
-  getData() {
-    Future.delayed(Duration(seconds: 3), () async {
+  getData(int? time) {
+    Future.delayed(Duration(seconds: time ?? 3), () async {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await Provider.of<AppState>(context, listen: false).init();
@@ -35,6 +36,18 @@ class _SplashScreenState extends State<SplashScreen>
             1) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               RoutePaths.HotelsScreen, (route) => false);
+        } else {
+          try {
+            await Provider.of<AppState>(context, listen: false).setHotel();
+          } on AppException catch (e) {
+            if (e.message!.contains("No Hotels")) {
+              FirebaseAuth.instance.signOut();
+              getData(0);
+              return;
+            }
+          }
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              RoutePaths.RoomsScreen, (route) => false);
         }
 
         //home page
@@ -58,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.addListener(() {
       setState(() {});
     });
-    getData();
+    getData(null);
   }
 
   @override

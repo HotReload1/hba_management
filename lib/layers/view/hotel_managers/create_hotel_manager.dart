@@ -161,6 +161,7 @@ class _CreateHotelManagerState extends State<CreateHotelManager> {
                         SizedBox(height: 16.0),
                         TextFormField(
                           controller: _emailController,
+                          readOnly: isUpdating,
                           decoration: InputDecoration(
                             labelText: 'Email',
                             border: OutlineInputBorder(),

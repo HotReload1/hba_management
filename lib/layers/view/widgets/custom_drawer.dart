@@ -8,6 +8,8 @@ import 'package:hba_management/layers/data/model/user_model.dart';
 import 'package:hba_management/layers/view/hotel/hotels.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/shared_preferences/shared_preferences_instance.dart';
+import '../../../core/shared_preferences/shared_preferences_key.dart';
 import '../../../injection_container.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -20,6 +22,39 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  superAdminOptions() {
+    return [
+      DrawerOption(
+          icon: Icons.home,
+          title: "Hotels",
+          function: () => Navigator.of(context)
+              .pushReplacementNamed(RoutePaths.HotelsScreen)),
+      DrawerOption(
+          icon: Icons.person,
+          title: "Hotels Managers",
+          function: () => Navigator.of(context)
+              .pushReplacementNamed(RoutePaths.HotelManagersScreen))
+    ];
+  }
+
+  hotelManagerOptions() {
+    return [
+      DrawerOption(
+          icon: Icons.home,
+          title: "Rooms",
+          function: () => Navigator.of(context)
+              .pushReplacementNamed(RoutePaths.RoomsScreen)),
+    ];
+  }
+
+  List<DrawerOption> getOptions() {
+    if (SharedPreferencesInstance.pref.getInt(SharedPreferencesKeys.UserRole) ==
+        1) {
+      return superAdminOptions();
+    }
+    return hotelManagerOptions();
+  }
+
   showAlertDialog(Function function) {
     // set up the button
     Widget okButton = TextButton(
@@ -63,29 +98,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  _buildDrawerOption(Icon icon, String title, VoidCallback onTap, int index) {
+  _buildDrawerOption(DrawerOption drawerOption, int index) {
     return Container(
       color: CustomDrawer.selectedTab == index
           ? Styles.colorPrimary.withOpacity(0.2)
           : Colors.transparent,
       child: ListTile(
-        leading: icon,
+        leading: Icon(drawerOption.icon),
         title: Text(
-          title,
+          drawerOption.title,
           style: const TextStyle(
             fontSize: 20.0,
           ),
         ),
         onTap: () {
           print(index);
-          if (index == 2) {
-            onTap();
+          if (index == getOptions().length) {
+            drawerOption.function();
           } else if (CustomDrawer.selectedTab == index) {
             Navigator.of(context).pop();
           } else {
             CustomDrawer.previousTab = CustomDrawer.selectedTab;
             CustomDrawer.selectedTab = index;
-            onTap();
+            drawerOption.function();
             setState(() {});
           }
         },
@@ -96,6 +131,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   signOut(BuildContext context) async {
     await Future.wait(
         [FirebaseAuth.instance.signOut(), sl.reset(dispose: false)]);
+    CustomDrawer.selectedTab = 0;
+    CustomDrawer.previousTab = 0;
     initInjection();
     Navigator.of(context)
         .pushNamedAndRemoveUntil(RoutePaths.LogIn, (route) => false);
@@ -103,8 +140,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel currentUser =
-        Provider.of<AppState>(context, listen: false).userModel!;
+    UserModel currentUser = Provider.of<AppState>(context, listen: false).user!;
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -156,27 +192,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
               children: [
                 Expanded(
                   child: Column(
-                    children: [
-                      _buildDrawerOption(
-                          const Icon(Icons.home),
-                          'Hotels',
-                          () => Navigator.of(context)
-                              .pushReplacementNamed(RoutePaths.HotelsScreen),
-                          0),
-                      _buildDrawerOption(
-                          const Icon(Icons.person),
-                          'Hotel Managers',
-                          () => Navigator.of(context).pushReplacementNamed(
-                              RoutePaths.HotelManagersScreen),
-                          1),
-                    ],
+                    children: List.generate(
+                        getOptions().length,
+                        (index) =>
+                            _buildDrawerOption(getOptions()[index], index)),
                   ),
                 ),
-                _buildDrawerOption(const Icon(Icons.logout), 'Logout', () {
-                  setState(() {
-                    showAlertDialog(() => signOut(context));
-                  });
-                }, 2),
+                _buildDrawerOption(
+                    DrawerOption(
+                      icon: Icons.logout,
+                      title: "Logout",
+                      function: () {
+                        showAlertDialog(() => signOut(context));
+                      },
+                    ),
+                    getOptions().length),
               ],
             ),
           )
@@ -184,4 +214,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
+}
+
+class DrawerOption {
+  final IconData icon;
+  final String title;
+  final Function function;
+
+  DrawerOption(
+      {required this.icon, required this.title, required this.function});
 }

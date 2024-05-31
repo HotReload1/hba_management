@@ -66,6 +66,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.images.length);
     if (widget.startIndex != null && _pageController.hasClients) {
       _pageController.animateToPage(widget.startIndex!,
           duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -100,26 +101,28 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                         end: Alignment.topCenter)),
               ),
             ),
-            Positioned(
-              bottom: 10,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SmoothPageIndicator(
-                    controller: _pageController,
-                    count: widget.images.length,
-                    effect: SwapEffect(
-                      activeDotColor: Colors.white70,
-                      dotColor: Colors.white38,
-                      dotHeight: 10,
-                      dotWidth: 10,
+            widget.images.length > 1
+                ? Positioned(
+                    bottom: 10,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SmoothPageIndicator(
+                          controller: _pageController,
+                          count: widget.images.length,
+                          effect: SwapEffect(
+                            activeDotColor: Colors.white70,
+                            dotColor: Colors.white38,
+                            dotHeight: 10,
+                            dotWidth: 10,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  )
+                : SizedBox(),
             Positioned(
               top: 10,
               left: 10,

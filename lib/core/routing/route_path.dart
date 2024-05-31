@@ -1,3 +1,4 @@
+
 class RoutePaths {
   static const LogIn = '/LogIn';
   static const ShowDetail = '/ShowDetail';
@@ -7,4 +8,6 @@ class RoutePaths {
   static const HotelManagersScreen = '/HotelManagersScreen';
   static const CreateHotelScreen = '/CreateHotelScreen';
   static const CreateHotelManager = '/CreateHotelManager';
+  static const RoomsScreen = '/RoomsScreen';
+  static const CreateRoomScreen = '/CreateRoomScreen';
 }

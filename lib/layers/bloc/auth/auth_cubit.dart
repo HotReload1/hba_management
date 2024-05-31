@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hba_management/core/shared_preferences/shared_preferences_instance.dart';
 import 'package:hba_management/core/shared_preferences/shared_preferences_key.dart';
 import 'package:meta/meta.dart';
-
 import '../../../injection_container.dart';
 import '../../data/repository/auth_repository.dart';
 
